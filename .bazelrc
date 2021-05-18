@@ -1,19 +1,21 @@
-build:msvc --cxxopt="/std:c++17"
+build:msvc --cxxopt /std:c++latest
+build:msvc --cxxopt /D_HAS_DEPRECATED_RESULT_OF  # Fix "error C2653: 'result_of': is not a class or namespace name"
 
-build:clang --repo_env=CC=clang
-build:clang --cxxopt="-std=c++17"
+build:clang --repo_env CC=clang
+build:clang --cxxopt -std=c++20
 
-build:clang-asan --repo_env=CC=clang
-build:clang-asan --cxxopt="-std=c++17"
-build:clang-asan --strip=never
+build:clang-asan --repo_env CC=clang
+build:clang-asan --cxxopt -std=c++20
+build:clang-asan --strip never
 build:clang-asan --copt -fsanitize=address
 build:clang-asan --copt -DADDRESS_SANITIZER
 build:clang-asan --copt -O1
 build:clang-asan --copt -g
 build:clang-asan --copt -fno-omit-frame-pointer
 build:clang-asan --linkopt -fsanitize=address
-build:clang-asan --platform_suffix=asan  # separate build cache
+build:clang-asan --platform_suffix asan  # separate build cache
 
-test --test_output=errors
-test --cxxopt=-DENABLE_ASSERTIONS
-test --platform_suffix=test  # separate build cache
+# TODO: Test with and without assertions to catch bugs from assertions having side-effects
+test --test_output errors
+test --cxxopt -DENABLE_ASSERTIONS
+test --platform_suffix test  # separate build cache

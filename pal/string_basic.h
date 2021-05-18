@@ -21,6 +21,7 @@
 
 #pragma once
 
+// #include <concepts>  // TODO: Uncomment this and `std::convertible_to` below when Clang supports it.
 #include <string>
 #include <typeinfo>
 
@@ -73,12 +74,13 @@ constexpr std::string_view get_type_name() {
   constexpr std::string_view prefix = "with T = ";
   constexpr std::string_view suffix = "; ";
   constexpr std::string_view function = __PRETTY_FUNCTION__;
-#elif defined(__MSC_VER)
+#elif defined(_MSC_VER)
   constexpr std::string_view prefix = "get_type_name<";
   constexpr std::string_view suffix = ">(void)";
   constexpr std::string_view function = __FUNCSIG__;
 #else
   return typeid(T).name();
+  constexpr std::string_view prefix, suffix, function;
 #endif
   const auto start = function.find(prefix) + prefix.size();
   const auto end = function.find(suffix);
@@ -88,6 +90,18 @@ constexpr std::string_view get_type_name() {
   const auto size = end - start;
   return function.substr(start, size);
 }
+
+template<typename T>
+concept HasDumpToStringImpl = requires(T v) {
+  // { dump_to_string_impl(v) } -> std::convertible_to<std::string>;
+  dump_to_string_impl(v);
+};
+
+template<typename T>
+concept HasToString = requires(T v) {
+  // { to_string(v) } -> std::convertible_to<std::string>;
+  to_string(v);
+};
 
 class DumpToStringHelper {
 private:
@@ -105,28 +119,6 @@ private:
     absl::c_sort(ret);
     return ret;
   }
-
-  template <typename T>
-  class HasDumpToStringImpl {
-  private:
-    typedef char YesType[1];
-    typedef char NoType[2];
-    template <typename U> static YesType& test(decltype(dump_to_string_impl(std::declval<U>())));
-    template <typename U> static NoType& test(...);
-  public:
-    enum { value = sizeof(test<T>("")) == sizeof(YesType) };
-  };
-
-  template <typename T>
-  class HasToString {
-  private:
-    typedef char YesType[1];
-    typedef char NoType[2];
-    template <typename U> static YesType& test(decltype(to_string(std::declval<U>())));
-    template <typename U> static NoType& test(...);
-  public:
-    enum { value = sizeof(test<T>("")) == sizeof(YesType) };
-  };
 
   template<typename T>
   static std::string auto_dump(const T&) {
@@ -184,19 +176,16 @@ private:
   }
 
 public:
-  template<typename T>
-  static typename std::enable_if_t<HasDumpToStringImpl<T>::value, std::string>
-  dump_impl(T& v) {
+  template<typename T> requires HasDumpToStringImpl<T>
+  static std::string dump_impl(T& v) {
     return dump_to_string_impl(v);
   }
-  template<typename T>
-  static typename std::enable_if_t<!HasDumpToStringImpl<T>::value && HasToString<T>::value, std::string>
-  dump_impl(T& v) {
+  template<typename T> requires (!HasDumpToStringImpl<T>) && HasToString<T>
+  static std::string dump_impl(T& v) {
     return to_string(v);
   }
   template<typename T>
-  static typename std::enable_if_t<!HasDumpToStringImpl<T>::value && !HasToString<T>::value, std::string>
-  dump_impl(T& v) {
+  static std::string dump_impl(T& v) {
     return auto_dump(v);
   }
 };

@@ -20,8 +20,8 @@ public:
     iterator operator++(int) { auto old_iter = *this; ++value_; return old_iter; }
     int operator*() const { return value_; }
     const int* operator->() const { return &value_; }
-    bool operator==(iterator other) { return value_ == other.value_; }
-    bool operator!=(iterator other) { return value_ != other.value_; }
+    bool operator==(const iterator& other) const = default;
+    bool operator!=(const iterator& other) const = default;
   private:
     int value_;
   };

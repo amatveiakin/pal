@@ -1,4 +1,4 @@
-#include "lib/string.h"
+#include "pal/string.h"
 
 #include <map>
 #include <vector>
@@ -8,6 +8,17 @@
 
 
 using namespace pal;
+
+
+class ClassA {};
+class ClassB {};
+class ClassC {};
+
+std::string to_string(const ClassB&) { return "to_string_B"; };
+
+std::string to_string(const ClassC&) { return "to_string_C"; };
+std::string dump_to_string_impl(const ClassC&) { return "dump_to_string_impl_C"; };
+
 
 TEST(StringTest, AutoDump) {
   std::map<int, std::vector<std::string>> data;
@@ -21,6 +32,12 @@ TEST(StringTest, AutoDump) {
     testing::HasSubstr("bar"),
     testing::HasSubstr("buz")
   ));
+}
+
+TEST(StringTest, DumpPriority) {
+  EXPECT_THAT(dump_to_string(ClassA{}), testing::HasSubstr("ClassA"));
+  EXPECT_THAT(dump_to_string(ClassB{}), testing::HasSubstr("to_string_B"));
+  EXPECT_THAT(dump_to_string(ClassC{}), testing::HasSubstr("dump_to_string_impl_C"));
 }
 
 TEST(StringTest, Trim) {

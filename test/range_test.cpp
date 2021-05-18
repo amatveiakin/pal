@@ -1,9 +1,9 @@
-#include "lib/range.h"
+#include "pal/range.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "lib/util.h"
+#include "pal/util.h"
 
 
 using namespace pal;

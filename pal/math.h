@@ -1,10 +1,15 @@
 
 #pragma once
 
-#include <check.h>
+#include "check.h"
 
 
 namespace pal {
+
+template<typename T>
+T sqr(const T& v) {
+  return v * v;
+}
 
 inline int pos_mod(int x, int y) {
   CHECK_GT(y, 0);

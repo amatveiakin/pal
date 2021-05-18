@@ -93,20 +93,20 @@ CheckResult check_ge(CheckLocation loc, const X& x, const Y& y, const char* x_st
 // Use tertiary operator to avoid evaluating arguments when check passes
 
 #define CHECK(condition)  \
-  internal::check({__FILE__, __LINE__}, condition, STRINGIFY(condition)).ok ? std::cerr : std::cerr
+  pal::internal::check({__FILE__, __LINE__}, condition, STRINGIFY(condition)).ok ? std::cerr : std::cerr
 
 #define CHECK_EQ(lhs, rhs)  \
-  internal::check_eq({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_eq({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 #define CHECK_NE(lhs, rhs)  \
-  internal::check_ne({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_ne({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 #define CHECK_LT(lhs, rhs)  \
-  internal::check_lt({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_lt({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 #define CHECK_LE(lhs, rhs)  \
-  internal::check_le({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_le({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 #define CHECK_GT(lhs, rhs)  \
-  internal::check_gt({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_gt({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 #define CHECK_GE(lhs, rhs)  \
-  internal::check_ge({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
+  pal::internal::check_ge({__FILE__, __LINE__}, lhs, rhs, STRINGIFY(lhs), STRINGIFY(rhs)).ok ? std::cerr : std::cerr
 
 
 #ifndef ENABLE_ASSERTIONS

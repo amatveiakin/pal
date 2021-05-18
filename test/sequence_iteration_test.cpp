@@ -1,8 +1,8 @@
-#include "lib/sequence_iteration.h"
+#include "pal/sequence_iteration.h"
 
 #include "gtest/gtest.h"
 
-#include "lib/range.h"
+#include "pal/range.h"
 
 
 using namespace pal;

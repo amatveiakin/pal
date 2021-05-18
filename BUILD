@@ -1,7 +1,7 @@
 cc_library(
     name = "pal",
-    srcs = glob(["lib/*.cpp"]),
-    hdrs = glob(["lib/*.h"]),
+    srcs = glob(["pal/*.cpp"]),
+    hdrs = glob(["pal/*.h"]),
     visibility = ["//visibility:public"],
     deps = [
         "@absl//absl/algorithm",
